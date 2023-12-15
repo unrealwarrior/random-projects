@@ -93,20 +93,10 @@ class BasicCalc():
             if subopr in self.VALID_OPERATIONS:
                 second_input = self.evaluate_results(first_input=second_input, operator=subopr)
             
-            first_input = self.evaluate_results(first_input=first_input, operator=opr, second_input=second_input)
-            print(f"results: first: {first_input} and second: {second_input} = {first_input}")
-                
-                # res = self.evaluate_results(first_input, operator=opr, second_input=second_input)
-                # print(f"{first_input} {opr} {second_input} = {res}")
+            res = self.evaluate_results(first_input=first_input, operator=opr, second_input=second_input)
+            print(f"results: first: {first_input} and second: {second_input} = {res}")
+            first_input = res
 
-                # while True:
-                #     opr = self.display_available_methods()
-                #     if opr in self.VALID_OPERATIONS:
-                #         self.evaluate_results(res, operator=opr)
-                #     else:
-                #         x = input("Enter next input: ")
-                #         res2 = self.evaluate_results(first_input=res, operator=opr, second_input=x)
-                #         print(f"{res} {opr} {x} = {res2}")
 
 
 
