@@ -1,5 +1,6 @@
 import math
 import sys
+import time
 # redo ability and save history
 # memory stuff
 # parse a full operation
@@ -17,6 +18,7 @@ class BasicCalc():
         "reciproc" : "Get the reciprocal of a number",
         "abs": "Negate a number",
         "c": "clear everything",
+        "h": "show history",
         "e": "Exit the program.",
         "n": "Do nothing."
 
@@ -34,18 +36,61 @@ class BasicCalc():
 
     # display input messages
     def display_available_methods(self):
-        for key, value in self.OPERATIONS.items():
-            print(f"{key} = {value}")
-        opr = input("\n > Choose from available methods: ")
-        if opr in ["e", "E"]:
-            sys.exit()
-        elif opr in ["n", "N"]:
-            return 
-        while opr not in self.OPERATIONS.keys():
-            opr = input("\n > Choose from available methods: ")
-            print("Invalid operator.")
-        print(f"User input : {opr}")
+        while True:
+            for key, value in self.OPERATIONS.items():
+                print(f"{key} = {value}")
+            opr = input("\n> Choose from available methods: ")
+            if opr in ["e", "E"]:
+                sys.exit()
+            elif opr in ["n", "N"]:
+                return "n"
+            elif opr in ["h", "H"]:
+                res = self.show_history()
+                if res == "b":
+                    continue
+                elif isinstance(res, int):
+                    return self.get_results_from_history(res)
+            while opr not in self.OPERATIONS.keys():
+                opr = input("\n> Choose from available methods: ")
+                print("Invalid operator.")
+                continue
+            print(f"User input : {opr}")
+            break
         return opr
+    
+    def get_results_from_history(self, user_input):
+        res = 0
+        while user_input > len(self.history):
+            print("invalid number. Try again.")
+            user_input = int(input(f"Choose from 0 to {len(self.history)}: "))
+            print(user_input)
+            continue
+
+        print(self.history[1:(user_input + 1)])
+        res = 0
+        for n in self.history[1: (user_input + 1)]:
+            x = n.split(" ")
+            opr = x[0]
+            num = x[1]
+            res = self.evaluate_results(first_input=num, operator=opr, second_input=res)
+        print(f"res : {res}")
+        return res
+    
+    # show history of operations made by user
+    def show_history(self):
+        if len(self.history) <= 1:
+            print("no history to show.")
+        else:
+            for index, his in enumerate(self.history):
+                print(f"{index} - {his}")
+            user_input = int(input(f"Choose from 0 to {len(self.history)}: "))
+            print("b to go back")
+            if user_input == "b":
+                return "b"
+            else:
+                return user_input
+
+        
     # negate a number
     def negate(self, num):
         num = int(num)
@@ -104,6 +149,11 @@ class BasicCalc():
             self.history.append(f"{num}")
         else:
             self.history.append(f"{opr} {num}")
+            # if opr in self.VALID_OPERATIONS:
+            #     self.history.append(f"{opr}({num})")
+            # else:
+            #     self.history.append(f"{opr} {num}")
+        print("history: ")
         print(self.history)
 
     def main(self):
@@ -117,10 +167,20 @@ class BasicCalc():
             while opr in self.VALID_OPERATIONS:
                 self.save_history(first_input, opr)
                 first_input = self.evaluate_results(first_input, operator=opr)
-                opr = self.display_available_methods()    
+                opr = self.display_available_methods()
+
+            if isinstance(opr, int): 
+                first_input = opr  
+                opr = self.display_available_methods()
+                continue  
 
             second_input = self.get_user_input("second")
             subopr = self.display_available_methods()
+            if isinstance(subopr, int):
+                first_input = subopr
+                opr = self.display_available_methods()
+                continue
+
             self.save_history(second_input, opr)
             if subopr == "c":
                 break
