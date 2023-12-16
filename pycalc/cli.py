@@ -1,8 +1,11 @@
 import math
 import sys
+# redo ability and save history
+# memory stuff
+# parse a full operation
 class BasicCalc():
     VALID_OPERATORS = ["+", "-", "*", "/", "%"]
-    VALID_OPERATIONS = ["sqrt", "reciproc"]
+    VALID_OPERATIONS = ["sqrt", "reciproc", "abs"]
 
     OPERATIONS = {
         "+" : "Add Number",
@@ -11,15 +14,24 @@ class BasicCalc():
         "-" : "Subtract Number",
         "%" : "Get the percentage of a number",
         "sqrt": "Get the square root of a number",
-        "reciproc" : "reciproc = Get the reciprocal of a number",
+        "reciproc" : "Get the reciprocal of a number",
+        "abs": "Negate a number",
         "c": "clear everything",
         "e": "Exit the program.",
         "n": "Do nothing."
 
     }
     def __init__(self) -> None:
-        pass
+        self.history = list()
     
+    @property
+    def history(self):
+        return self._history
+    
+    @history.setter
+    def history(self, value):
+        self._history = value
+
     # display input messages
     def display_available_methods(self):
         for key, value in self.OPERATIONS.items():
@@ -28,13 +40,19 @@ class BasicCalc():
         if opr in ["e", "E"]:
             sys.exit()
         elif opr in ["n", "N"]:
-            return 0
+            return 
         while opr not in self.OPERATIONS.keys():
             opr = input("\n > Choose from available methods: ")
             print("Invalid operator.")
         print(f"User input : {opr}")
         return opr
-
+    # negate a number
+    def negate(self, num):
+        num = int(num)
+        if num < 0:
+            return abs(num)
+        else:
+            return -abs(num)
     # get the percentage of a number
     def perc(self, num1, num2):
         print(f"{num1} // {num2}")
@@ -75,27 +93,50 @@ class BasicCalc():
             res = self.reciproc(int(first_input))
             print(f"Reciprocal of {first_input} is {res}")
         elif operator == "%":
-            self.perc(first_input, second_input)
+            res = self.perc(first_input, second_input)
+        elif operator == "abs":
+            res = self.negate(first_input)
         print(f"results : {res}")
         return res
-        
+    
+    def save_history(self, num, opr):
+        if len(self.history) == 0 and opr not in self.VALID_OPERATIONS:
+            self.history.append(f"{num}")
+        else:
+            self.history.append(f"{opr} {num}")
+        print(self.history)
+
     def main(self):
         first_input = self.get_user_input("First")
+        opr = self.display_available_methods()
+        if opr in self.VALID_OPERATORS:
+            self.save_history(first_input, opr)
         while True:
-            opr = self.display_available_methods()
-            print(opr)
-            if opr in self.VALID_OPERATIONS:
+            
+
+            while opr in self.VALID_OPERATIONS:
+                self.save_history(first_input, opr)
                 first_input = self.evaluate_results(first_input, operator=opr)
-                opr = self.display_available_methods()
-                
+                opr = self.display_available_methods()    
+
             second_input = self.get_user_input("second")
             subopr = self.display_available_methods()
+            self.save_history(second_input, opr)
+            if subopr == "c":
+                break
             if subopr in self.VALID_OPERATIONS:
-                second_input = self.evaluate_results(first_input=second_input, operator=subopr)
-            
+                self.save_history(second_input, subopr)
+                second_input = self.evaluate_results(first_input=second_input, operator=subopr) 
+
+                
             res = self.evaluate_results(first_input=first_input, operator=opr, second_input=second_input)
             print(f"results: first: {first_input} and second: {second_input} = {res}")
             first_input = res
+            opr = self.display_available_methods()
+
+        # calling the function itself is a form of resetting everything
+        # exiting the program will call sys.exit()
+        self.main()
 
 
 
