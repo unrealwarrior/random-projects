@@ -1,9 +1,7 @@
 import math
 import sys
 import time
-# redo ability and save history
 # memory stuff
-# parse a full operation
 class BasicCalc():
     VALID_OPERATORS = ["+", "-", "*", "/", "%"]
     VALID_OPERATIONS = ["sqrt", "reciproc", "abs"]
@@ -17,14 +15,32 @@ class BasicCalc():
         "sqrt": "Get the square root of a number",
         "reciproc" : "Get the reciprocal of a number",
         "abs": "Negate a number",
+        "M" : "Memory Operations",
         "c": "clear everything",
         "h": "show history",
         "e": "Exit the program.",
         "n": "Do nothing."
 
     }
+    MEMORY_OPERATIONS = {
+        "MC" : "Memory Clear",
+        "MR": "Memory Recall",
+        "MS" : "Memory Save",
+        "M+" : "Memory Add",
+        "M-": "Memory Subtract"
+    }
     def __init__(self) -> None:
         self.history = list()
+        self.first_run = True
+        self.memory = 0
+
+    @property
+    def memory(self):
+        return self._memory
+    
+    @memory.setter
+    def memory(self, value):
+        self._memory = value
     
     @property
     def history(self):
@@ -34,16 +50,57 @@ class BasicCalc():
     def history(self, value):
         self._history = value
 
+    # memory operations
+    def clear_memory(self):
+        print("Memory Cleared!!!")
+        self.memory = 0
+    
+    def recall_memory(self):
+        print(f"Memory Recall: {self.memory}")
+        return self.memory
+    
+    def save_memory(self, value):
+        self.memory = value
+    
+    # display and execute memory operations
+    def mem_operations(self, value=0):
+        while True:
+            for key, value in self.MEMORY_OPERATIONS.items():
+                print(f"{key}: {value}")
+            opr = input("> Select your operation, Q to quit: ")
+            if opr in ["mc", "MC"]:
+                self.clear_memory()
+                return
+            elif opr in ["mr", "MR"]:
+                return self.recall_memory()
+            elif opr in ["ms", "MS"]:
+                self.save_memory(value=value)
+            elif opr in ["q", "Q"]:
+                break
+
     # display input messages
     def display_available_methods(self):
         while True:
-            for key, value in self.OPERATIONS.items():
-                print(f"{key} = {value}")
+            if self.first_run:
+                for key, value in self.OPERATIONS.items():
+                    print(f"{key}= {value}")
+                self.first_run = False
+            if self.first_run == False:
+                print("d to display all available methods.")
             opr = input("\n> Choose from available methods: ")
             if opr in ["e", "E"]:
                 sys.exit()
             elif opr in ["n", "N"]:
                 return "n"
+            elif opr in ["d", "D"]:
+                self.first_run = True
+                continue
+            elif opr in ["m", "M"]:
+                self.mem_operations()
+                continue
+            elif opr in ["c", "C"]:
+                print("Restarting...")
+                self.main()
             elif opr in ["h", "H"]:
                 res = self.show_history()
                 if res == "b":
@@ -162,10 +219,6 @@ class BasicCalc():
             self.history.append(f"{num}")
         else:
             self.history.append(f"{opr} {num}")
-            # if opr in self.VALID_OPERATIONS:
-            #     self.history.append(f"{opr}({num})")
-            # else:
-            #     self.history.append(f"{opr} {num}")
         print("history: ")
         print(self.history)
 
@@ -175,7 +228,6 @@ class BasicCalc():
         if opr in self.VALID_OPERATORS:
             self.save_history(first_input, opr)
         while True:
-            
 
             while opr in self.VALID_OPERATIONS:
                 self.save_history(first_input, opr)
@@ -195,8 +247,6 @@ class BasicCalc():
                 continue
 
             self.save_history(second_input, opr)
-            if subopr == "c":
-                break
             if subopr in self.VALID_OPERATIONS:
                 self.save_history(second_input, subopr)
                 second_input = self.evaluate_results(first_input=second_input, operator=subopr) 
@@ -211,13 +261,13 @@ class BasicCalc():
                 opr = self.display_available_methods()
                 continue  
 
-
-        # calling the function itself is a form of resetting everything
-        # exiting the program will call sys.exit()
-        self.main()
+        # # calling the function itself is a form of resetting everything
+        # # exiting the program will call sys.exit()
+        # self.main()
 
 
 
 
 x = BasicCalc()
 x.main()
+
