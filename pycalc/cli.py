@@ -66,13 +66,16 @@ class BasicCalc():
             print(user_input)
             continue
 
-        print(self.history[1:(user_input + 1)])
+        print(self.history[:(user_input + 1)])
         res = 0
-        for n in self.history[1: (user_input + 1)]:
+        for n in self.history[: (user_input + 1)]:
             x = n.split(" ")
-            opr = x[0]
-            num = x[1]
-            res = self.evaluate_results(first_input=num, operator=opr, second_input=res)
+            if len(x) == 2:
+                opr = x[0]
+                num = int(x[1])
+                res = self.evaluate_results(first_input=num, operator=opr, second_input=res)
+            else:
+                res += int(x[0])
         print(f"res : {res}")
         return res
     
@@ -110,9 +113,19 @@ class BasicCalc():
     
     def get_user_input(self, value_string):
         user_input = input("Enter the %s value: " % value_string)
-        while not user_input.isnumeric() and (float(user_input).is_integer()):
-            print("Input is not a number. Try again.")
-            user_input = input("Enter the %s value: " % value_string)
+        
+        while True:
+            try:
+                while not float(user_input) and float(user_input).is_integer():
+                    print("Input is not a number. Try again.")
+                    user_input = input("Enter the %s value: " % value_string)
+                break
+            except ValueError:
+                print("try/block error!")
+                print("Input is not a number. Try again.")
+                user_input = input("Enter the %s value: " % value_string)    
+                continue
+        print(user_input)
         return user_input
     
 
@@ -193,6 +206,11 @@ class BasicCalc():
             print(f"results: first: {first_input} and second: {second_input} = {res}")
             first_input = res
             opr = self.display_available_methods()
+            if isinstance(opr, int): 
+                first_input = opr  
+                opr = self.display_available_methods()
+                continue  
+
 
         # calling the function itself is a form of resetting everything
         # exiting the program will call sys.exit()
