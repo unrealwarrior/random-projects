@@ -1,7 +1,5 @@
 import math
 import sys
-import time
-# memory stuff
 class BasicCalc():
     VALID_OPERATORS = ["+", "-", "*", "/", "%"]
     VALID_OPERATIONS = ["sqrt", "reciproc", "abs"]
@@ -33,6 +31,15 @@ class BasicCalc():
         self.history = list()
         self.first_run = True
         self.memory = 0
+        self.user_input = ""
+    
+    @property
+    def user_input(self):
+        return self._user_input
+
+    @user_input.setter
+    def user_input(self, value):
+        self._user_input = value
 
     @property
     def memory(self):
@@ -56,27 +63,45 @@ class BasicCalc():
         self.memory = 0
     
     def recall_memory(self):
-        print(f"Memory Recall: {self.memory}")
+        print(f"Value stored in memory: {self.memory}")
         return self.memory
     
-    def save_memory(self, value):
-        self.memory = value
+    def save_memory(self):
+        print(f"Last memory value : {self.memory} \\ Changed to: {self.user_input}")
+        self.memory = int(self.user_input)
+        
+    def memory_add(self):
+        # add the current value in self.user_input
+        res = self.memory + int(self.user_input)
+        print(f"Memory added from {self.memory} to {res}")
+        self.memory = res
+
+    def memory_subtract(self):
+        res = self.memory - int(self.user_input)
+        print(f"Memory subtracted from {self.memory} to {res}")
+        self.memory = res    
     
     # display and execute memory operations
-    def mem_operations(self, value=0):
+    def mem_operations(self):
         while True:
             for key, value in self.MEMORY_OPERATIONS.items():
                 print(f"{key}: {value}")
             opr = input("> Select your operation, Q to quit: ")
             if opr in ["mc", "MC"]:
                 self.clear_memory()
-                return
             elif opr in ["mr", "MR"]:
-                return self.recall_memory()
+                self.recall_memory()
             elif opr in ["ms", "MS"]:
-                self.save_memory(value=value)
+                self.save_memory()
+            elif opr in ["m+", "M+"]:
+                self.memory_add()
+            elif opr in ["m-", "M-"]:
+                self.memory_subtract()
             elif opr in ["q", "Q"]:
                 break
+            else:
+                print("Wrong input. Choose from the options above.")
+                continue
 
     # display input messages
     def display_available_methods(self):
@@ -223,41 +248,49 @@ class BasicCalc():
         print(self.history)
 
     def main(self):
-        first_input = self.get_user_input("First")
+        res = 0
+        self.user_input = self.get_user_input("First")
         opr = self.display_available_methods()
         if opr in self.VALID_OPERATORS:
-            self.save_history(first_input, opr)
+            self.save_history(self.user_input, opr)
         while True:
 
             while opr in self.VALID_OPERATIONS:
-                self.save_history(first_input, opr)
-                first_input = self.evaluate_results(first_input, operator=opr)
+                self.save_history(self.user_input, opr)
+                self.user_input = self.evaluate_results(self.user_input, operator=opr)
                 opr = self.display_available_methods()
 
             if isinstance(opr, int): 
-                first_input = opr  
+                self.user_input = opr  
                 opr = self.display_available_methods()
                 continue  
 
-            second_input = self.get_user_input("second")
+            temp = self.user_input
+
+            self.user_input = self.get_user_input("second")
             subopr = self.display_available_methods()
             if isinstance(subopr, int):
-                first_input = subopr
+                self.user_input = subopr
                 opr = self.display_available_methods()
                 continue
 
-            self.save_history(second_input, opr)
+            self.save_history(self.user_input, opr)
             if subopr in self.VALID_OPERATIONS:
-                self.save_history(second_input, subopr)
-                second_input = self.evaluate_results(first_input=second_input, operator=subopr) 
+                self.save_history(self.user_input, subopr)
+                self.user_input = self.evaluate_results(first_input=self.user_input, operator=subopr) 
 
                 
-            res = self.evaluate_results(first_input=first_input, operator=opr, second_input=second_input)
-            print(f"results: first: {first_input} and second: {second_input} = {res}")
-            first_input = res
+            res = self.evaluate_results(first_input=temp, operator=opr, second_input=self.user_input)
+            print(f"results: first: {temp} and second: {self.user_input} = {res}")
+            # first_input = res
+
+            # hacky, I know, but this will override the temp variable with the last results
+            # from the the input from the first one
+            self.user_input = res
+
             opr = self.display_available_methods()
             if isinstance(opr, int): 
-                first_input = opr  
+                self.user_input = opr  
                 opr = self.display_available_methods()
                 continue  
 
