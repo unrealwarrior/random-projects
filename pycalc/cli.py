@@ -34,6 +34,14 @@ class BasicCalc():
         self.user_input = ""
     
     @property
+    def first_run(self):
+        return self._first_run
+    
+    @first_run.setter
+    def first_run(self, value):
+        self._first_run = value
+
+    @property
     def user_input(self):
         return self._user_input
 
@@ -56,6 +64,13 @@ class BasicCalc():
     @history.setter
     def history(self, value):
         self._history = value
+
+    # clear everything after a restart
+    def clear_all(self):
+        self.memory = 0
+        self.user_input = ""
+        self.history.clear()
+        self.first_run = True
 
     # memory operations
     def clear_memory(self):
@@ -125,6 +140,7 @@ class BasicCalc():
                 continue
             elif opr in ["c", "C"]:
                 print("Restarting...")
+                self.clear_all()
                 self.main()
             elif opr in ["h", "H"]:
                 res = self.show_history()
@@ -159,6 +175,7 @@ class BasicCalc():
             else:
                 res += int(x[0])
         print(f"res : {res}")
+        self.history = self.history[:(user_input + 1)]
         return res
     
     # show history of operations made by user
