@@ -18,6 +18,7 @@ class BasicCalc():
         "h": "show history",
         "e": "Exit the program.",
         "n": "Do nothing."
+        
 
     }
     MEMORY_OPERATIONS = {
