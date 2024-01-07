@@ -1,0 +1,76 @@
+.container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  height: 100vh;
+}
+body{
+  margin: 0;
+}
+
+.grid{
+  display: grid;
+  grid-template-columns: repeat(4, 128px);
+}
+
+.intro p{
+  font-size: 1.2rem;
+}
+
+.intro{
+  text-align: center;
+  margin-top: 40px;
+}
+
+.stats{
+  display: flex;
+  justify-content: space-between;
+}
+
+.retry{
+  margin-top: 2rem;
+}
+
+
+
+.dialog__overlay{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 120px;
+  z-index: 99;
+}
+.test{
+  position: absolute;
+  background-color: #00000041;
+  width: 100%;
+  height: 100%;
+}
+.dialog{
+  background-color: #fff;
+  height: fit-content;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  width: 25%;
+}
+
+.dialog__range{
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 1rem;
+}
+
+.dialog__range span{
+  padding: 0.25rem;
+}
+.dialog__range input{
+  width: 100%;
+}
+
