@@ -29,14 +29,13 @@ function getRandomNumber(n=8){
 
 
 function Game(props) {
-  const [gridMatrix, setGridMatrix] = useState(16)
+  const [gridMatrix, setGridMatrix] = useState(8)
   const [grid, setGrid] = useState([])
   const initGrid = useMemo(() => {
     const randomNumbers = getRandomNumber(gridMatrix)
     const arr = Array.from({length: gridMatrix}).map((c, index) => {
       return {index: index, isActive : false, value: randomNumbers[index]}
     })
-    console.log(arr)
     setGrid(arr)
     return arr
     
@@ -45,16 +44,18 @@ function Game(props) {
   const [score, setScore] = useState(0)
   const [numTries, setNumTries] = useState(0)
   const [state, setState] = useState("Dialog")
-
+  
   function handleRangeChange(e){
     const data = e.target.value
     setGridMatrix(data)
     console.log(gridMatrix)
   }
-
-  // function initGrid(){
-  // }
-  console.log(grid)
+  
+  const x = []
+  for (let i = 0; i < grid.length; i += 4) {
+    x.push(grid.slice(i, i + 4))
+    
+  }
   function checkActiveBlocks(blocksActive){
     if (blocksActive.length == 2){
       if(grid[blocksActive[0]].value === grid[blocksActive[1]].value){
@@ -142,13 +143,19 @@ function Game(props) {
             <p>Total Score: {score}</p>
           </div>
         </div>
-          <div className='grid'>
+          <ul className='grid'>
             {grid.length == 0 ? (<>test</>) : (<>
-              {Array.from({length: gridMatrix}).map((c, i) => (
-                  <GridButton key={i} data={grid[i]} showValue={showValue}/>
+              {x.map((c, i) => (
+                <li key={i} className={`grid__row ${i == (x.length - 1) ? "bottom_level" : ""}`}>
+                  {                
+                  c.map((g, idx) => (
+                    <GridButton key={idx} data={g} showValue={showValue}/>
+                  ))}
+
+                </li>
               ))}
             </>)}
-          </div>
+          </ul>
           {state == "Over" && <button onClick={resetGame} className='retry'>Retry</button>}
           
         </div>
