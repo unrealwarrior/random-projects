@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import "../src/App.css"
 
 import GridButton from './Components/GridButton'
@@ -27,7 +27,6 @@ function getRandomNumber(n=8){
 }
 
 
-
 function Game(props) {
   const [gridMatrix, setGridMatrix] = useState(8)
   const [grid, setGrid] = useState([])
@@ -44,11 +43,22 @@ function Game(props) {
   const [score, setScore] = useState(0)
   const [numTries, setNumTries] = useState(0)
   const [state, setState] = useState("Dialog")
-  
+
+  useEffect(() => {
+    ScrollLock()
+  }, [state])
   function handleRangeChange(e){
     const data = e.target.value
     setGridMatrix(data)
     console.log(gridMatrix)
+  }
+  function ScrollLock(){
+    if (state === "Playing") {
+      document.querySelector("body").style.overflow = ""
+    }else if (state === "Dialog"){
+      document.querySelector("body").style.overflow = "hidden"
+    }
+
   }
   
   const x = []
@@ -128,7 +138,7 @@ function Game(props) {
                 <span>{64}</span>
 
               </div>
-              <button onClick={() => {setState("Playing")}}>Play!</button>
+              <button onClick={() => {setState("Playing");}}>Play!</button>
             </div>
           </div>
         </>}
