@@ -1,3 +1,4 @@
+import sys
 combinations = [
     [1, 2, 3],
     [1, 4, 7],
@@ -59,8 +60,11 @@ class PyTac():
                 break
 
             try:
-                g = self.split_list()
-                self.grid[int(pos[0])] = "O" if self.is_player_one == True else "X"
+                if(self.grid[int(pos[0])] == "_"):
+                    self.grid[int(pos[0])] = "O" if self.is_player_one == True else "X"
+                else:
+                    print("You can't override that block.")
+                    continue
             except IndexError:
                 print("Wrong coordinates. Try again.")
                 continue
@@ -68,8 +72,25 @@ class PyTac():
             if (self.check_winner()):
                 self.draw_grid()
                 return 0
-
+            
             self.is_player_one = not self.is_player_one
+
+            if all(map((lambda a : a != "_"), self.grid)):
+                print("Draw!")
+                while True:
+                    u = input("Do you wanna play again? : ")
+                    if u in ["Y", "y"]:
+                        self.reset_game()
+                        break
+                    elif u in ["N", "n"]:
+                        sys.exit()
+                    else:
+                        print("Wrong input. Try again.")
+                        continue
+    
+    def reset_game(self):
+        self.is_player_one = True
+        self.grid = ["_" for x in range(9)]
 
 
 if __name__ == "__main__":
