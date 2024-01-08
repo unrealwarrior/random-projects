@@ -1,6 +1,6 @@
 combinations = [
     [1, 2, 3],
-    [1, 5, 7],
+    [1, 4, 7],
     [1, 5, 9],
     [2, 5, 8],
     [3, 6, 9],
@@ -13,24 +13,23 @@ class PyTac():
     def __init__(self) -> None:
         self.grid = ["_" for x in range(9)]
         self.is_player_one = True
+
     def split_list(self):
         chunks = []
         for i in range(0, len(self.grid), 3):
             chunks.append(self.grid[i: i + 3])
         return chunks
     
-    def check_winner(self, g=None):
-        p = "O" if self.is_player_one == True else "X"
+    def check_winner(self):
+        pi = "O" if self.is_player_one == True else "X"
+        p = "one" if pi == "O" else "two"
 
         for c in combinations:
-            if all(g[(x - 1)] == p for x in c ):
-                return print(f'you win! combination : {c}')
+            if all(self.grid[(x - 1)] == pi for x in c ):
+                print(f'Player {p} wins! Combination : {c}')
+                return True
 
                 
-
-
-
-
     def draw_grid(self):
         for row in self.split_list():
             s = ""
@@ -47,30 +46,34 @@ class PyTac():
             while True:
                 user_input = input(f"Player {"one" if self.is_player_one == True else "two"} Pick the position you want:")
                 # user_input = user_input.rstrip().lstrip()
-                print(user_input)
                 pos = user_input.split(" ")
 
                 if len(pos) > 2:
                     print("You only need two coordinates. Try again.")
                     continue
 
-                if not pos[0].isnumeric() or not pos[1].isnumeric():
+                if not pos[0].isnumeric():
                     print("Only numbers are allowed. Try again.")
                     continue
 
                 break
 
             try:
-                self.grid[int(pos[0])][int(pos[1])] = "O" if self.is_player_one == True else "X"
-
+                g = self.split_list()
+                self.grid[int(pos[0])] = "O" if self.is_player_one == True else "X"
             except IndexError:
                 print("Wrong coordinates. Try again.")
                 continue
+
+            if (self.check_winner()):
+                self.draw_grid()
+                return 0
 
             self.is_player_one = not self.is_player_one
 
 
 if __name__ == "__main__":
     x = PyTac()
-    x.draw_grid()
-    x.check_winner(g=['O','_','_','_','O','_','_','_','O'])
+    x.play()
+    # x.draw_grid()
+    # x.check_winner(g=['O','_','_','O','_','_','O','_', '_'])
