@@ -46,22 +46,23 @@ class PyTac():
             pos = []
             while True:
                 user_input = input(f"Player {"one" if self.is_player_one == True else "two"} Pick the position you want:")
-                # user_input = user_input.rstrip().lstrip()
                 pos = user_input.split(" ")
 
-                if len(pos) > 2:
-                    print("You only need two coordinates. Try again.")
-                    continue
+                # if len(pos) > 2:
+                #     print("You only need two coordinates. Try again.")
+                #     continue
 
                 if not pos[0].isnumeric():
                     print("Only numbers are allowed. Try again.")
                     continue
 
+                pos = int(pos[0]) - 1
+
                 break
 
             try:
-                if(self.grid[int(pos[0])] == "_"):
-                    self.grid[int(pos[0])] = "O" if self.is_player_one == True else "X"
+                if(self.grid[pos] == "_"):
+                    self.grid[pos] = "O" if self.is_player_one == True else "X"
                 else:
                     print("You can't override that block.")
                     continue
