@@ -1,31 +1,24 @@
 import sys
-combinations = [
-    [1, 2, 3],
-    [1, 4, 7],
-    [1, 5, 9],
-    [2, 5, 8],
-    [3, 6, 9],
-    [3, 2, 1],
-    [3, 5, 7],
-    [4, 5, 6],
-    [7, 8, 9],
-]
-class PyTac():
+from utils import Utils
+from cpu import BotPlayer
+
+class PyTac(Utils, BotPlayer):
     def __init__(self) -> None:
         self.grid = ["_" for x in range(9)]
         self.is_player_one = True
+        self.testme()
 
-    def split_list(self):
-        chunks = []
-        for i in range(0, len(self.grid), 3):
-            chunks.append(self.grid[i: i + 3])
-        return chunks
+    # def split_list(self):
+    #     chunks = []
+    #     for i in range(0, len(self.grid), 3):
+    #         chunks.append(self.grid[i: i + 3])
+    #     return chunks
     
     def check_winner(self):
         pi = "O" if self.is_player_one == True else "X"
         p = "one" if pi == "O" else "two"
 
-        for c in combinations:
+        for c in self.combinations:
             if all(self.grid[(x - 1)] == pi for x in c ):
                 print(f'Player {p} wins! Combination : {c}')
                 return True
@@ -96,6 +89,6 @@ class PyTac():
 
 if __name__ == "__main__":
     x = PyTac()
-    x.play()
-    # x.draw_grid()
+    # x.play()
+    x.draw_grid()
     # x.check_winner(g=['O','_','_','O','_','_','O','_', '_'])
