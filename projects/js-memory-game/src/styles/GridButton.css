@@ -1,61 +1,59 @@
-.grid__block{
-    border: 2px solid rgb(246, 188, 79);
-    width: 128px;
-    height: 128px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.grid__block {
+  border: 2px solid rgb(246, 188, 79);
+  width: 128px;
+  height: 128px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .grid div p {
-    font-size: 2rem;
+  font-size: 2rem;
 }
-.grid{
-    padding: 0
+.grid {
+  padding: 0;
 }
-.grid__row{
-    text-align: center;
-    display: flex;
-}
-
-.grid__value:hover{
-    background-color:rgba(227, 226, 226, 0.5);
-}
-.grid__active{
-    border-color: rgb(255, 140, 0);
-}
-.grid__success{
-    border-color: green;
-}
-.grid__error{
-    border-color: red;
+.grid__row {
+  text-align: center;
+  display: flex;
 }
 
-.grid__value{
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.grid__value:hover {
+  background-color: rgba(227, 226, 226, 0.5);
+}
+.grid__active {
+  border-color: rgb(255, 140, 0);
+}
+.grid__success {
+  border-color: green;
+}
+.grid__error {
+  border-color: red;
 }
 
-@media only screen and (min-width: 380px ) and (max-width: 600px) {
-    .grid__block{
-        width: 96px;
-        height: 96px;
-    }
+.grid__value {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-    .grid__block div p {
-        font-size: 1.5rem;
-    }
+@media only screen and (min-width: 380px) and (max-width: 600px) {
+  .grid__block {
+    width: 96px;
+    height: 96px;
+  }
 
-    .retry{
-        margin-top: 0;
-    }
+  .grid__block div p {
+    font-size: 1.5rem;
+  }
 
-    .dialog{
-        width: 50%;
-    }
+  .retry {
+    margin-top: 0;
+  }
 
-
+  .dialog {
+    width: 50%;
+  }
 }
