@@ -7,56 +7,56 @@ class BotPlayer(Utils):
         self.grid = grid
     
     def _add_block(self, grid, pos):
-        grid[pos[0]][pos[1]] = "X"
+        grid[pos[0]][pos[1]] = "O"
         return grid
     
     def check_block_surroundings(self, pos_x, pos_y, grid):
         g = self.split_list(grid=grid)
-        pos_x = pos_x - 1
-        pos_y = pos_y - 1
-        g = self._add_block(g, pos=(pos_x, pos_y))
-       
-        
+        # last played position
+        # pos_x = pos_x - 1
+        # pos_y = pos_y - 1
+        # g = self._add_block(g, pos=(pos_x, pos_y))
 
-        if (pos_x - 1) < 0:
-            print("no more items on the left.")
-
-        try:
-
-            if g[pos_x][(pos_y + 1)] == "X":
-                print("+1 triggered.")
-                g[pos_x][(pos_y + 2)] = "B"
-
-        except IndexError:
-            print("out of range")
-
-
-        # check block surroundings on the x-axis
-        try:
-            if g[pos_x][(pos_y - 1)] == "X":
-                g[pos_x][(pos_y - 2)] = "B"
+        # check if there's items on the left
+        if (pos_y - 1) < 0:
+            print(f"No more blocks on the left of [{pos_x}][{pos_y}]")
+            return False
+        else:
+            y = pos_y - 1
+            b = g[pos_x][y]
+            if b == "O":
+                flag = self.check_block_surroundings(pos_x, y, grid=[y for x in g for y in x])  
+                if flag == False:
+                    print("time to go right.") 
+                else:
+                    g = flag
                 
-            else:
-                print("no items on the left of the block.")
-        except IndexError:
-            print("out of range.")
-        # # check block surroundings on the y-axis
+                    
+            elif b == "_":                    
+                print(f"block at [{pos_x}][{y}] was added.")
+                g[pos_x][y] = "B"
+                return g
+        if (pos_y + 1) > (len(g[0]) - 1):
+            print("no more blocks on the right.")
+        else:
+            y = pos_y + 1
+            b = g[pos_x][y]
+            if b == "O":
+                flag = self.check_block_surroundings(pos_x, y, grid=[y for x in g for y in x])
+                if flag == False:
+                    print("time to go somewhere.") 
+                else:
+                    g = flag
+            elif b == "_":                    
+                print(f"block at [{pos_x}][{y}] was added.")
+                g[pos_x][y] = "B"
+                return g
 
-        # if (pos_y - 1) < 0:
-        #     print("no more items above.")
-        
-        # # it's a 3x3 grid, doesn't matter
-        # if (pos_y + 1) > len(g[0]):
-        #     print("no more items below.")
 
-        # if g[pos_x][(pos_y - 1)] == "X":
-        #     g[pos_x][(pos_y + 1)] == "B"
-
-        # elif g[pos_x][(pos_y + 1)] == "X":
-        #     g[pos_x][(pos_y - 1)] == "B"
+        return g
 
 
-        [print(x) for x in g]     
+
 
 
 
@@ -112,4 +112,11 @@ class BotPlayer(Utils):
 
 x = BotPlayer(["_","_","_","_","_","_","_","_","_",])
 # x.bot_play()
-x.check_block_surroundings(pos_x=1, pos_y=3, grid=["X","_","_","_","_","_","_","_","_",])
+z = x.check_block_surroundings(pos_x=0, pos_y=2, grid=["_","O","_","_","_","_","_","_","_",])
+[print(x) for x in z]
+
+
+# g = ["_","_","_","_","_","_","_","_","_",]
+# g = x.split_list(g)
+# # z = [y for x in g for y in x]
+# print(z)
