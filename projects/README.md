@@ -5,9 +5,9 @@ here are written by me without the need of any help like tutorials.
 
 1. [Python](#Python)
     - [PyCalc](https://github.com/unrealwarrior/random-projects/tree/main/projects/pycalc)
-2. [JavaScript](https://github.com/unrealwarrior/random-projects/tree/main/projects#JavaScript)
+2. [JavaScript](#JavaScript)
     - [Memory Game](https://github.com/unrealwarrior/random-projects/tree/main/projects#JavaScript)
-4. [C++](https://github.com/unrealwarrior/random-projects/tree/main/projects#Cpp)
+4. [C++](#Cpp)
 
 
 ## Python
