@@ -11,7 +11,7 @@ here are written by me without the need of any help like tutorials.
 
 
 ## Python
-### [pyCalc](https://github.com/unrealwarrior/random-projects/tree/main/projects)
+### [pyCalc](https://github.com/unrealwarrior/random-projects/tree/main/projects):
 A calculator built in python inspired by Windows's built-in calculator. It has the ability to re-do previous operations.
 
 
