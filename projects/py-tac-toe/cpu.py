@@ -5,19 +5,26 @@ edge_blocks = [[0, 0], [0, 2], [2, 0], [2, 2]]
 
 class BotPlayer(Utils):
     def __init__(self, grid) -> None:
-        # self.grid = grid
+        self.grid = grid
         pass    
     
-    def flip_list(self):
+    def flip_list(self, grid=None, reverse=False):
+        if grid : self.grid = grid
         new_grid = []
         for idx in range(len(self.grid)):
             x = []
             for index in range(len(self.grid[0])):
-                x.append(self.grid[index][idx])
+                x.append(self.grid[index][idx]) if reverse else x.append(self.grid[idx][index])
             new_grid.append(x)
         return new_grid
     
     def check_surroundings(self, grid, pos):
+        print(f"pos: {pos} ")
+        print(f"len: {len(grid[0])}")
+        print(pos[1] >= len(grid[0]))
+        if pos[1] < 0 or pos[1] >= len(grid[0]):
+            return False
+        
         block = grid[pos[0]][pos[1]] 
         if block == "O" or block == "B":
             return False
@@ -27,6 +34,7 @@ class BotPlayer(Utils):
     def check_block_surroundings(self, pos_x, pos_y, grid):
         # split a one dimensional array to chunks
         g = self.split_list(grid=grid)
+        self.grid = g
         axis = "y"          
         direction_flag = ""
         # check if there's items on the left
@@ -35,35 +43,40 @@ class BotPlayer(Utils):
         else:
             direction_flag = "right"
         print(f"Lookup direction: {direction_flag}")
-        if axis == "y":
-            y = (pos_y - 1) if direction_flag == "left" else (pos_y + 1)
-        else:
-            g = flip_list()
-            y = pos_y       # keep the initial value
-            x = (pos_x - 1) if direction_flag == "up" else (pos_x + 1)
-
+        # y = (pos_y - 1) if direction_flag == "left" else (pos_y + 1)
+        y = pos_y
+        x = pos_x
         while True:
-            print(f"Next block lookup: grid[{pos_x}][{y}]")
-            if self.check_surroundings(grid=g, pos=(pos_x, y)):
-                print(f"block at [{pos_x}][{y}] was added.")
-                g[pos_x][y] = "B"
-                return g
+            print(f"Next block lookup: grid[{x}][{y}]")
+            # check for random strategies ex: O|_|_ or _|O|_ 
+            if self.check_surroundings(grid=g, pos=(x, y)):
+                print(f"block at [{x}][{y}] was added.")
+                g[x][y] = "B"
+                return g if axis == "y" else self.flip_list(grid=g, reverse=True)
             else:
                 if ((y - 1) < 0):
                     direction_flag = "right"
                     print("going right.")
-                    y = pos_y       # restore initial position on the x-axis
+                    y = (pos_y + 1) if axis == "y" else (pos_x + 1)     # restore initial position on the x-axis
                     continue
                 else:
                     print("More blocks available. Looping...")
                     y = y - 1 if direction_flag == "left" else y + 1
+
                     if (y + 1) > len(g[0]):
                         print("No more lookups.")
-                        y = pos_y   # restore x-axis initial position for y-axis lookup
-                        break
+                        direction_flag = "left"
+                        axis = "x"
+                        y = pos_x - 1   # restore x-axis initial position for y-axis lookup
+                        x = pos_y
+                        print("flipping positions")
+                        g = self.flip_list(reverse=True)
+                        print(g)
+                        continue                     
                     continue
-        
 
+        if axis == "x":
+            g = self.flip_list()            
         return g
                     
         # if axis == "y":
@@ -170,7 +183,8 @@ class BotPlayer(Utils):
 x = BotPlayer(["_","_","_","_","_","_","_","_","_",])
 # x.bot_play()
 
-grid = ["O","_","_","_","_","_","_","_","_",]
+# grid = ["_","2","3","_","5","6","_","8","9",]
+grid = ["_","_","_","_","_","_","_","_","_"]
 while True:
     coords = input("> enter your coordinates: ")
     posx, posy = coords.split(" ")
