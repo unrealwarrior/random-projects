@@ -2,20 +2,20 @@ from utils import Utils
 import itertools
 edge_blocks = [[0, 0], [0, 2], [2, 0], [2, 2]]
 
-def flip_list(arr):
-    ass = []
-    for idx in range(len(arr)):
-        x = []
-        for index in range(len(arr[0])):
-            x.append(arr[index][idx])
-        ass.append(x)
-    print(ass)
-    return ass
 
 class BotPlayer(Utils):
     def __init__(self, grid) -> None:
         # self.grid = grid
         pass    
+    
+    def flip_list(self):
+        new_grid = []
+        for idx in range(len(self.grid)):
+            x = []
+            for index in range(len(self.grid[0])):
+                x.append(self.grid[index][idx])
+            new_grid.append(x)
+        return new_grid
     
     def check_surroundings(self, grid, pos):
         block = grid[pos[0]][pos[1]] 
@@ -27,6 +27,7 @@ class BotPlayer(Utils):
     def check_block_surroundings(self, pos_x, pos_y, grid):
         # split a one dimensional array to chunks
         g = self.split_list(grid=grid)
+        axis = "y"          
         direction_flag = ""
         # check if there's items on the left
         if (pos_y - 1) >= 0:
@@ -34,11 +35,15 @@ class BotPlayer(Utils):
         else:
             direction_flag = "right"
         print(f"Lookup direction: {direction_flag}")
-        y = (pos_y - 1) if direction_flag == "left" else (pos_y + 1)
-        b = g[pos_x][y]
+        if axis == "y":
+            y = (pos_y - 1) if direction_flag == "left" else (pos_y + 1)
+        else:
+            g = flip_list()
+            y = pos_y       # keep the initial value
+            x = (pos_x - 1) if direction_flag == "up" else (pos_x + 1)
+
         while True:
             print(f"Next block lookup: grid[{pos_x}][{y}]")
-
             if self.check_surroundings(grid=g, pos=(pos_x, y)):
                 print(f"block at [{pos_x}][{y}] was added.")
                 g[pos_x][y] = "B"
@@ -47,33 +52,19 @@ class BotPlayer(Utils):
                 if ((y - 1) < 0):
                     direction_flag = "right"
                     print("going right.")
-                    y = pos_y       # restore initial position on the y-axis
+                    y = pos_y       # restore initial position on the x-axis
                     continue
                 else:
                     print("More blocks available. Looping...")
                     y = y - 1 if direction_flag == "left" else y + 1
                     if (y + 1) > len(g[0]):
                         print("No more lookups.")
-                        return g
+                        y = pos_y   # restore x-axis initial position for y-axis lookup
+                        break
                     continue
+        
 
-        # else:
-        #     print(f"No more blocks on the left of [{pos_x}][{pos_y}]")
-        #     # check if there's blocks on the right 
-        #     if (pos_y + 1) > (len(g[0]) - 1):
-        #         print("no more blocks on the right.")
-        #     else:
-        #         y = pos_y + 1
-        #         b = g[pos_x][y]
-        #         if b == "O":
-        #             flag = self.check_block_surroundings(pos_x, y, grid=[y for x in g for y in x])
-        #         elif b == "_":                    
-        #             print(f"block at [{pos_x}][{y}] was added.")
-        #             g[pos_x][y] = "B"
-        #             return g
-                        
-                            
-
+        return g
                     
         # if axis == "y":
         #     # try the y-axis now
@@ -120,10 +111,6 @@ class BotPlayer(Utils):
         #             print("test")
         #             return g
 
-
-
-
-        return g
 
 
 
@@ -190,5 +177,5 @@ while True:
     pos = (int(posx) * 3) + int(posy)
     grid[pos] = 'O'
     grid = x.check_block_surroundings(pos_x=int(posx), pos_y=int(posy), grid=[grid for x in grid for grid in x])
-    print([print(g) for g in grid])
+    [print(g) for g in grid]
     grid = [grid for x in grid for grid in x]
