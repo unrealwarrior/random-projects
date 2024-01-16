@@ -1,5 +1,7 @@
 from utils import Utils
 import itertools
+import sys
+import random
 edge_blocks = [[0, 0], [0, 2], [2, 0], [2, 2]]
 
 
@@ -8,6 +10,14 @@ class BotPlayer(Utils):
         self.grid = grid
         pass    
     
+    def flatten_list(self, grid=None):
+        new_list = []
+        for row in grid:
+            for block in row:
+                new_list.append(block)
+        return new_list
+    
+
     def flip_list(self, grid=None, reverse=False):
         if grid : self.grid = grid
         new_grid = []
@@ -19,12 +29,10 @@ class BotPlayer(Utils):
         return new_grid
     
     def check_surroundings(self, grid, pos):
-        print(f"pos: {pos} ")
-        print(f"len: {len(grid[0])}")
+
         print(pos[1] >= len(grid[0]))
         if pos[1] < 0 or pos[1] >= len(grid[0]):
             return False
-        
         block = grid[pos[0]][pos[1]] 
         if block == "O" or block == "B":
             return False
@@ -37,6 +45,12 @@ class BotPlayer(Utils):
         self.grid = g
         axis = "y"          
         direction_flag = ""
+        # if bot plays first, let him check a random block
+        if list(map(lambda a : a == "_", [y for x in g for y in x])):
+            print("test")
+            g = self.get_random_block(grid=g)
+            return g
+        
         # check if there's items on the left
         if (pos_y - 1) >= 0:
             direction_flag = "left"
@@ -64,6 +78,9 @@ class BotPlayer(Utils):
                     y = y - 1 if direction_flag == "left" else y + 1
 
                     if (y + 1) > len(g[0]):
+                        if axis == "x":
+                            print("No more blocks to fill.")
+                            return g
                         print("No more lookups.")
                         direction_flag = "left"
                         axis = "x"
@@ -73,62 +90,20 @@ class BotPlayer(Utils):
                         g = self.flip_list(reverse=True)
                         print(g)
                         continue                     
-                    continue
+                    # continue
 
-        if axis == "x":
-            g = self.flip_list()            
-        return g
-                    
-        # if axis == "y":
-        #     # try the y-axis now
-        #     g = flip_list(g)
-        #     if (pos_x - 1) < 0:
-        #         print("no more blocks above.")
-        #         return flip_list(g)
-        #     else:
-        #         x = pos_x -1 
-                
-        #         b = g[x][pos_y]
-        #         if b == "O":
-        #             g = flip_list(g)
-        #             flag = self.check_block_surroundings(x, pos_y, grid=[y for x in g for y in x], axis="y")
-        #             if flag == False:
-        #                 print("time to go somewhere.") 
-        #             else:
-        #                 g = flag
-        #         elif b == "_":                    
-        #             print(f"block at [{x}][{pos_y}] was added.")
-        #             g[x][pos_y] = "B"
-        #             g = flip_list(g)
-        #             print("test")
-        #             return g
-                
-        #     if (pos_x + 1) > (len(g[0]) - 1):
-        #         print("no more blocks below.")
-        #         return flip_list(g)
-        #     else:
-        #         x = pos_x + 1
-                
-        #         b = g[x][pos_y]
-        #         if b == "O":
-        #             g = flip_list(g)
-        #             flag = self.check_block_surroundings(x, pos_y, grid=[y for x in g for y in x])
-        #             if flag == False:
-        #                 print("time to go somewhere.") 
-        #             else:
-        #                 g = flag
-        #         elif b == "_":                    
-        #             print(f"block at [{x}][{pos_y}] was added.")
-        #             g[x][pos_y] = "B"
-        #             g = flip_list(g)
-        #             print("test")
-        #             return g
+    def get_random_block(self, grid):
+        # flatten the grid
+        g = self.flatten_list(grid)
+        ids = []
+        for index, block in enumerate(g):
+            if block == "_":
+                ids.append(index)
+        i = random.choice(ids)
+        g[i] = "B"
+        return self.split_list(grid=g)
 
-
-
-
-
-
+     
 
     def add_block(self, pos_x, pos_y):
         g = self.split_list()
@@ -180,16 +155,21 @@ class BotPlayer(Utils):
 
         
 
-x = BotPlayer(["_","_","_","_","_","_","_","_","_",])
+grid = ["_","_","_","_","_","_","_","_","_"]
+x = BotPlayer(grid)
 # x.bot_play()
 
 # grid = ["_","2","3","_","5","6","_","8","9",]
-grid = ["_","_","_","_","_","_","_","_","_"]
 while True:
-    coords = input("> enter your coordinates: ")
-    posx, posy = coords.split(" ")
-    pos = (int(posx) * 3) + int(posy)
-    grid[pos] = 'O'
+    if(all(map(lambda a: a != "_", grid))):
+        print("all blocks were played.")
+        sys.exit()
+    # coords = input("> enter your coordinates: ")
+    # posx, posy = coords.split(" ")
+    # pos = (int(posx) * 3) + int(posy)
+    # grid[pos] = 'O'
+    posx = 0
+    posy = 0
     grid = x.check_block_surroundings(pos_x=int(posx), pos_y=int(posy), grid=[grid for x in grid for grid in x])
     [print(g) for g in grid]
     grid = [grid for x in grid for grid in x]
