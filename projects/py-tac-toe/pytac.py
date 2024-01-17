@@ -4,16 +4,10 @@ from cpu import BotPlayer
 
 class PyTac(Utils, BotPlayer):
     def __init__(self) -> None:
-        self.grid = ["_" for x in range(9)]
+        self.grid = ["_" for _ in range(9)]
         self.is_player_one = True
-        self.testme()
-
-    # def split_list(self):
-    #     chunks = []
-    #     for i in range(0, len(self.grid), 3):
-    #         chunks.append(self.grid[i: i + 3])
-    #     return chunks
     
+    # determine winner
     def check_winner(self):
         pi = "O" if self.is_player_one == True else "X"
         p = "one" if pi == "O" else "two"
@@ -22,16 +16,20 @@ class PyTac(Utils, BotPlayer):
             if all(self.grid[(x - 1)] == pi for x in c ):
                 print(f'Player {p} wins! Combination : {c}')
                 return True
-
-                
-    def draw_grid(self):
-        for row in self.split_list():
-            s = ""
+      
+    # draw grid on console
+    def draw_grid(self, grid=None):
+        if grid == None: grid = self.grid
+        grid = self.split_list(grid)
+        new_grid = ""
+        for row in grid:
             for idx, block in enumerate(row):
-                s += block
+                new_grid += block
                 if not idx == len(row) - 1:
-                    s += " | "
-            print(s)
+                    new_grid += " | "
+            new_grid += "\n"
+        print(new_grid)
+        return new_grid
 
     def play(self):
         while True:
@@ -40,19 +38,11 @@ class PyTac(Utils, BotPlayer):
             while True:
                 user_input = input(f"Player {"one" if self.is_player_one == True else "two"} Pick the position you want:")
                 pos = user_input.split(" ")
-
-                # if len(pos) > 2:
-                #     print("You only need two coordinates. Try again.")
-                #     continue
-
                 if not pos[0].isnumeric():
                     print("Only numbers are allowed. Try again.")
                     continue
-
                 pos = int(pos[0]) - 1
-
                 break
-
             try:
                 if(self.grid[pos] == "_"):
                     self.grid[pos] = "O" if self.is_player_one == True else "X"
@@ -63,14 +53,10 @@ class PyTac(Utils, BotPlayer):
                 print("Wrong coordinates. Try again.")
                 continue
 
-            if (self.check_winner()):
-                self.draw_grid()
-                return 0
-            
+            winner = self.check_winner()
             self.is_player_one = not self.is_player_one
-
-            if all(map((lambda a : a != "_"), self.grid)):
-                print("Draw!")
+            if winner or (all(map((lambda a : a != "_"), self.grid))):      # tried self.check_winner() but for some reason did not work.
+                if not winner : print("Draw!")
                 while True:
                     u = input("Do you wanna play again? : ")
                     if u in ["Y", "y"]:
@@ -89,6 +75,4 @@ class PyTac(Utils, BotPlayer):
 
 if __name__ == "__main__":
     x = PyTac()
-    # x.play()
-    x.draw_grid()
-    # x.check_winner(g=['O','_','_','O','_','_','O','_', '_'])
+    x.play()

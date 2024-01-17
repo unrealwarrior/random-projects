@@ -5,7 +5,7 @@ import random
 edge_blocks = [[0, 0], [0, 2], [2, 0], [2, 2]]
 
 
-class BotPlayer(Utils):
+class BotPlayer():
     def __init__(self, grid) -> None:
         self.grid = grid
         pass    
@@ -154,22 +154,22 @@ class BotPlayer(Utils):
 
 
         
+if __name__ == "__main__":
+    grid = ["_","_","_","_","_","_","_","_","_"]
+    x = BotPlayer(grid)
+    # x.bot_play()
 
-grid = ["_","_","_","_","_","_","_","_","_"]
-x = BotPlayer(grid)
-# x.bot_play()
-
-# grid = ["_","2","3","_","5","6","_","8","9",]
-while True:
-    if(all(map(lambda a: a != "_", grid))):
-        print("all blocks were played.")
-        sys.exit()
-    # coords = input("> enter your coordinates: ")
-    # posx, posy = coords.split(" ")
-    # pos = (int(posx) * 3) + int(posy)
-    # grid[pos] = 'O'
-    posx = 0
-    posy = 0
-    grid = x.check_block_surroundings(pos_x=int(posx), pos_y=int(posy), grid=[grid for x in grid for grid in x])
-    [print(g) for g in grid]
-    grid = [grid for x in grid for grid in x]
+    # grid = ["_","2","3","_","5","6","_","8","9",]
+    while True:
+        if(all(map(lambda a: a != "_", grid))):
+            print("all blocks were played.")
+            sys.exit()
+        # coords = input("> enter your coordinates: ")
+        # posx, posy = coords.split(" ")
+        # pos = (int(posx) * 3) + int(posy)
+        # grid[pos] = 'O'
+        posx = 0
+        posy = 0
+        grid = x.check_block_surroundings(pos_x=int(posx), pos_y=int(posy), grid=[grid for x in grid for grid in x])
+        [print(g) for g in grid]
+        grid = [grid for x in grid for grid in x]
