@@ -1,6 +1,7 @@
 import sys
 from utils import Utils
 from cpu import BotPlayer
+import itertools
 
 class PyTac(Utils, BotPlayer):
     def __init__(self) -> None:
@@ -48,6 +49,7 @@ class PyTac(Utils, BotPlayer):
                 x = int(pos[0]) 
                 y = int(pos[1])
                 break
+
             try:
                 if(self.grid[x][y] == "_"):
                     self.grid[x][y] = "O" if self.is_player_one == True else "X"
@@ -57,10 +59,11 @@ class PyTac(Utils, BotPlayer):
             except IndexError:
                 print("Wrong coordinates. Try again.")
                 continue
+            self.check_block_surroundings(pos_x=x, pos_y=y, grid=list(itertools.chain(*self.grid)))
 
             winner = self.check_winner()
             print(winner)
-            self.is_player_one = not self.is_player_one
+            # self.is_player_one = not self.is_player_one
             if winner or (all(map((lambda a : a != "_"), self.flatten_list(grid=self.grid)))):      # tried self.check_winner() but for some reason did not work.
                 if not winner : print("Draw!")
                 while True:
