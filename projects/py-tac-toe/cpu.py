@@ -2,10 +2,10 @@ from utils import Utils
 import itertools
 import sys
 import random
-edge_blocks = [[0, 0], [0, 2], [2, 0], [2, 2]]
 
 
 class BotPlayer():
+    edge_blocks = [[0, 0], [0, 2], [2, 0], [2, 2]]
     def __init__(self, grid) -> None:
         self.grid = grid
         pass    
@@ -132,7 +132,7 @@ class BotPlayer():
         # if the player picked one of the four edges
         # check from the middle if there's a chance of winning
 
-        if [x_pos, y_pos] in [e for e in edge_blocks]:
+        if [x_pos, y_pos] in [e for e in self.edge_blocks]:
             # find out if the mid one is occupied by the player
             if new_grid[1][1] == "X":
                 if new_grid[0][0] == "X":
