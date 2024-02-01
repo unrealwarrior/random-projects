@@ -1,0 +1,63 @@
+img{
+    cursor: pointer;
+}
+
+.fileinfo{
+    font-size: 14px;
+    display: block;
+    margin-left: 16px;
+    margin-bottom: 4px;
+}
+
+.image__small{
+    width: 255px;
+    height: 255px;
+    float: left;
+    display: block;
+    margin: 0 16px 16px 16px;
+}
+
+.fullimage{
+    max-width: 90%;
+    margin: 0 16px 16px 16px;
+}
+
+.op__post{
+    margin-bottom: 5px;
+}
+
+.op__post span{
+    margin: 0 2px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10pt;
+}
+
+.post__description{
+    word-wrap: break-word;    
+    margin: 2px 0;
+}
+
+.op__dropmenu{
+    transition: transform 100ms;
+    display: inline-block;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.op__dropmenu:hover{
+    color: #d00;
+}
+
+.dropmenu__clicked{
+    transform: rotate(90deg);
+}
+
+.link{
+    text-decoration: none;
+    color: #000;
+}
+
+.custom__tooltip{
+    padding: 0;
+    background-color: red;
+}

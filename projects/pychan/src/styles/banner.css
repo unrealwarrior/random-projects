@@ -1,0 +1,18 @@
+.banner__placeholder{
+    background-color: #fff;
+    padding: .5rem;
+    text-align: left;
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-weight: bold;
+}
+
+.brand{
+    text-align: center;
+    margin-top: 20px;
+    color: green;
+    font-size: 24px;
+}
+
+.banner__placeholder p{
+    margin-bottom: 4px;
+}

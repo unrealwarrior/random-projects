@@ -56,10 +56,10 @@ class BotPlayer():
             print(f"Next block lookup: grid[{x}][{y}]")
             # check for random strategies ex: O|_|_ or _|O|_ 
             # check random strategies
-            # if x == 1 and y == 1:
-            #     flag = self.check_edge_blocks(pos=(x, y))
-            #     if flag:
-            #         return g if axis == "y" else self.flip_list(grid=g, reverse=True)
+            if pos_x == 1 and pos_y == 1:
+                flag = self.check_edge_blocks(pos=(x, y))
+                if flag:
+                    return g if axis == "y" else self.flip_list(grid=g, reverse=True)
             if self.check_surroundings(grid=g, pos=(x, y)):
                 print(f"block at [{x}][{y}] was added.")
                 g[x][y] = "B"

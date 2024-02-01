@@ -14,6 +14,7 @@ class PyTac(Utils, BotPlayer):
         p = "one" if pi == "O" else "two"
         g = self.flatten_list(grid=self.grid)
         for c in self.combinations:
+            print(c)
             if all(g[(x - 1)] == pi for x in c ):
                 print(f'Player {p} wins! Combination : {c}')
                 return True
