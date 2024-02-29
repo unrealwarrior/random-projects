@@ -48,7 +48,7 @@ class BotPlayer():
          
         # check if there's items on the left
         if (pos_y - 1) >= 0:
-            direction_flag = "left"
+            direction_flag = "left" 
         else:
             direction_flag = "right"
         print(f"Lookup direction: {direction_flag}")
