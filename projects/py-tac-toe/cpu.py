@@ -42,7 +42,7 @@ class BotPlayer():
         direction_flag = ""
         # if bot plays first, let him check a random block
         if all(map(lambda a : a == "_", [y for x in g for y in x])):
-            print("test")
+            print("test") 
             g = self.get_random_block(grid=g)
             return g
          
