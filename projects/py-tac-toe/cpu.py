@@ -45,7 +45,7 @@ class BotPlayer():
             print("test")
             g = self.get_random_block(grid=g)
             return g
-        
+         
         # check if there's items on the left
         if (pos_y - 1) >= 0:
             direction_flag = "left"
