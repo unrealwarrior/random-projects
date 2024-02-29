@@ -3,6 +3,8 @@ from utils import Utils
 from cpu import BotPlayer
 import itertools
 
+## AI is dumb enough not to pursue player 
+## make sure to check adjacent sides if there's two consequent player mark before playing the usual
 class PyTac(Utils, BotPlayer):
     def __init__(self) -> None:
         self.grid = ["_" for _ in range(9)]
@@ -10,15 +12,15 @@ class PyTac(Utils, BotPlayer):
     
     # determine winner
     def check_winner(self):
-        pi = "O" if self.is_player_one == True else "X"
+        pi = "O"
         p = "one" if pi == "O" else "two"
-        g = self.flatten_list(grid=self.grid)
+        g = list(itertools.chain(*self.grid))
         for c in self.combinations:
             print(c)
             if all(g[(x - 1)] == pi for x in c ):
                 print(f'Player {p} wins! Combination : {c}')
                 return True
-            return False
+        return False
       
     # draw grid on console
     def draw_grid(self, grid=None):
@@ -65,7 +67,7 @@ class PyTac(Utils, BotPlayer):
             winner = self.check_winner()
             print(winner)
             # self.is_player_one = not self.is_player_one
-            if winner or (all(map((lambda a : a != "_"), self.flatten_list(grid=self.grid)))):      # tried self.check_winner() but for some reason did not work.
+            if winner: 
                 if not winner : print("Draw!")
                 while True:
                     u = input("Do you wanna play again? : ")

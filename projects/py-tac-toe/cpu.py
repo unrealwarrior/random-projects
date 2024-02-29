@@ -24,6 +24,9 @@ class BotPlayer():
         if pos[1] < 0 or pos[1] >= len(grid[0]):
             return False
         
+        # check surroundings on the last player mark
+        # pick a random empty adjecent block and return it
+
         block = grid[pos[0]][pos[1]] 
         if block == "O" or block == "B":
             return False
